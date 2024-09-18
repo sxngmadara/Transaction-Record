@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Transaction Record</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 3em auto;
+            background-color: #fff;
+            padding: 2em;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 1em;
+        }
+        
+        label {
+            display: block;
+            margin: 1em 0 0.5em;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.5em;
+            margin-bottom: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1em;
+            /* Space between items */
+        }
+        
+        .row>div {
+            flex: 1;
+            /* Allow items to grow equally */
+        }
+        
+        #remark {
+            height: 50px;
+            /* Set height for the remark input */
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 0.75em;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Transaction Record</h1>
+
+        <form id="transactionForm" action="YOUR_GOOGLE_SCRIPT_WEB_APP_URL" method="POST">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+            <label for="transactionId">Transaction ID</label>
+            <input type="number" id="transactionId" name="transactionId" placeholder="Enter transaction ID" required>
+
+            <div class="row">
+                <div>
+                    <label for="company">Company</label>
+                    <select id="company" name="company" required>
+                        <option value="ea99">Ea99</option>
+                        <option value="sega99">Sega99</option>
+                        <option value="neogeo99">Neogeo99</option>
+                        <option value="imp999">Imp999</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="transactionType">Transaction Type</label>
+                    <select id="transactionType" name="transactionType" required>
+                        <option value="deposit">Deposit</option>
+                        <option value="withdraw">Withdraw</option>
+                        <option value="cashout">Cash-out</option>
+                        <option value="cashin">Cash-in</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" name="amount" placeholder="Enter amount" required min="0.01">
+                </div>
+            </div>
+
+            <label for="remark">Remark</label>
+            <input type="text" id="remark" name="remark" placeholder="Add any remarks" required>
+
+            <button type="submit">Submit Transaction</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById("transactionForm");
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const amount = parseFloat(document.getElementById("amount").value);
+            if (amount <= 0) {
+                alert("Amount must be greater than zero.");
+                return;
+            }
+
+            const formData = new FormData(form);
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true; // Disable button during submission
+
+            fetch(form.action, {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(response => {
+                    alert("Transaction submitted successfully!");
+                    form.reset(); // Reset form fields to initial values
+                })
+                .catch(error => {
+                    alert("Failed to submit transaction!");
+                    console.error("Error:", error);
+                })
+                .finally(() => {
+                    submitButton.disabled = false; // Re-enable button
+                });
+        });
+    </script>
+</body>
+<footer>
+    @Made by Sengly
+</footer>
+
+</html>
